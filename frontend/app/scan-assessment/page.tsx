@@ -11,6 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"; // Assuming correct path
+import { Label } from "@/components/ui/label"; // Added Label import
+import { Logo } from "@/components/logo"; // Added Logo import
 
 // Define the shape of the general info data
 type GeneralInfo = {
@@ -225,39 +227,72 @@ export default function ScanAssessmentPage() {
   return (
     <div className="flex flex-col min-h-screen bg-pink-50/30"> {/* Added subtle background */}
       {/* --- Header (from Snippet 2) --- */}
-      <header className="sticky top-0 z-10 bg-white border-b border-pink-100 shadow-sm">
-        <div className="container flex items-center justify-between h-16 px-4 mx-auto">
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold text-pink-600">HER'S</span> {/* Placeholder Logo/Name */}
+      <header className="sticky top-0 z-10 bg-white border-b border-pink-200 shadow-sm">
+        <div className="container flex items-center justify-between h-20 px-4 mx-auto">
+          <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+            <Logo 
+              height={40} 
+              width={180} 
+              className="flex-shrink-0 md:w-48 md:h-10 w-36 h-8 leading-none" 
+            />
           </Link>
           <nav className="hidden space-x-6 md:flex">
-            <Link href="/" className="text-pink-950 hover:text-pink-600 transition-colors">Home</Link>
-            <Link href="/chat" className="text-pink-950 hover:text-pink-600 transition-colors">Chat</Link>
-            <Link href="/risk-assessment" className="text-pink-950 hover:text-pink-600 transition-colors">Risk Assessment</Link>
-            <Link href="/scan-assessment" className="text-pink-600 font-medium">Scan Assessment</Link>
+            <Link href="/" className="text-pink-950 hover:text-pink-600 transition-colors">
+              Home
+            </Link>
+            <Link href="/blogs" className="text-pink-950 hover:text-pink-600 transition-colors">
+              Blogs
+            </Link>
+            <Link href="/chat" className="text-pink-950 hover:text-pink-600 transition-colors">
+              Chat
+            </Link>
+            <Link href="/risk-assessment" className="text-pink-950 hover:text-pink-600 transition-colors">
+              Risk Assessment
+            </Link>
+            <Link href="/scan-assessment" className="text-pink-600 font-medium">
+              Scan Assessment
+            </Link>
           </nav>
-          {/* Add mobile menu button here if needed */}
+          <div className="md:hidden">
+            {/* Mobile menu button */}
+            <Button variant="ghost" size="icon" className="text-pink-950">
+              <span className="sr-only">Open menu</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-6 w-6"
+              >
+                <line x1="4" x2="20" y1="12" y2="12" />
+                <line x1="4" x2="20" y1="6" y2="6" />
+                <line x1="4" x2="20" y1="18" y2="18" />
+              </svg>
+            </Button>
+          </div>
         </div>
       </header>
 
       {/* --- Main Content --- */}
       <main className="flex-1 container mx-auto px-4 py-12">
-        <div className="max-w-3xl mx-auto space-y-8"> {/* Added space-y for consistent spacing */}
+        <div className="max-w-4xl mx-auto">
+          {/* Back to Home Link */}
           <Link href="/">
-            <Button
-              variant="ghost"
-              className="mb-6 text-pink-600 hover:text-pink-700 hover:bg-pink-50 p-0"
-            >
+            <Button variant="ghost" className="mb-6 text-pink-600 hover:text-pink-700 hover:bg-pink-50 p-0">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to home
             </Button>
           </Link>
 
-          <h1 className="text-3xl font-bold text-pink-900 mb-6 text-center md:text-left"> {/* Centered on small screens */}
-            Breast Scan Assessment
-          </h1>
+          {/* Page Title */}
+          <h1 className="text-3xl font-bold text-pink-900 mb-8">Breast Scan Assessment</h1>
 
-          {/* --- 1. General Info Section --- */}
-          <Card className="border-pink-100 shadow-sm">
+          {/* Step 1: General Information */}
+          <Card className="mb-8 border-pink-100 shadow-sm">
             <CardHeader>
               <CardTitle className="text-pink-900">Step 1: General Information</CardTitle>
               <CardDescription>
@@ -266,184 +301,159 @@ export default function ScanAssessmentPage() {
             </CardHeader>
             <CardContent>
               <GeneralInfoForm onSubmit={handleInfoFormSubmit} />
-              {/* Optional: Display submitted info for confirmation */}
-              {infoSubmitted && generalInfo && (
-                 <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded">
-                    <p className="text-sm font-medium text-green-800">General information saved:</p>
-                    <pre className="mt-1 bg-white p-2 rounded text-xs text-gray-600 overflow-x-auto">
-                        {JSON.stringify(generalInfo, null, 2)}
-                    </pre>
-                 </div>
-              )}
             </CardContent>
           </Card>
 
-          {/* --- 2. Upload and Analyze Section --- */}
-          <Card className="border-pink-100 shadow-sm">
+          {/* Step 2: Upload & Analyze Scan */}
+          <Card className="mb-8 border-pink-100 shadow-sm">
             <CardHeader>
               <CardTitle className="text-pink-900">Step 2: Upload & Analyze Scan</CardTitle>
               <CardDescription>
-                Upload your mammogram, ultrasound, or MRI scan image (JPEG, PNG). Ensure your general info is saved first.
+                Upload your breast scan image (mammogram, ultrasound, or MRI) for AI-assisted analysis.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className={`border-2 border-dashed border-pink-200 rounded-lg p-8 text-center ${!infoSubmitted ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                <FileImage className="w-12 h-12 mx-auto text-pink-400 mb-4" />
-                <h3 className="text-lg font-medium text-pink-900 mb-2">
-                  {selectedFile ? selectedFile.name : "Drag and drop or browse"}
-                </h3>
-                <p className="text-sm text-gray-500 mb-4">Accepts: JPEG, PNG formats</p>
-                <input
-                  type="file"
-                  id="fileInput"
-                  accept="image/jpeg,image/png" // Removed DICOM for simplicity based on description text
-                  className="hidden"
-                  onChange={handleFileChange}
-                  disabled={!infoSubmitted} // Disable file input until info is submitted
-                />
-                 {/* File Upload Button */}
-                <Button
-                  className="bg-pink-600 hover:bg-pink-700 mb-4"
-                  onClick={handleUploadClick}
-                  disabled={!infoSubmitted} // Disable button until info is submitted
-                >
-                  <Upload className="w-4 h-4 mr-2" /> {selectedFile ? "Change File" : "Browse File"}
-                </Button>
+              <div className="space-y-6">
+                {/* File Upload Section */}
+                <div>
+                  <Label htmlFor="fileInput" className="text-sm font-medium text-pink-700 mb-2 block">
+                    Select Scan Image
+                  </Label>
+                  <div className="border-2 border-dashed border-pink-200 rounded-lg p-6 text-center hover:border-pink-300 transition-colors">
+                    <input
+                      id="fileInput"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                    {!selectedFile ? (
+                      <div>
+                        <div className="mx-auto h-12 w-12 text-pink-400 mb-4">
+                          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                          </svg>
+                        </div>
+                        <p className="text-sm text-pink-600 mb-2">Click to upload or drag and drop</p>
+                        <p className="text-xs text-pink-500">PNG, JPG, JPEG up to 10MB</p>
+                        <Button
+                          type="button"
+                          onClick={handleUploadClick}
+                          className="mt-4 bg-pink-600 hover:bg-pink-700 text-white"
+                        >
+                          Choose File
+                        </Button>
+                      </div>
+                    ) : (
+                      <div>
+                        <div className="mx-auto h-12 w-12 text-green-500 mb-4">
+                          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <p className="text-sm text-green-600 mb-2">File selected: {selectedFile.name}</p>
+                        <Button
+                          type="button"
+                          onClick={handleUploadClick}
+                          variant="outline"
+                          className="mt-2"
+                        >
+                          Change File
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
 
-                {/* Image Preview */}
+                {/* Preview Section */}
                 {previewUrl && (
-                  <div className="mt-4">
-                     <img
-                    src={previewUrl}
-                    alt="Scan Preview"
-                    className="mx-auto max-h-64 object-contain rounded-md border border-pink-100"
-                  />
+                  <div>
+                    <Label className="text-sm font-medium text-pink-700 mb-2 block">
+                      Image Preview
+                    </Label>
+                    <div className="border border-pink-200 rounded-lg p-4">
+                      <img
+                        src={previewUrl}
+                        alt="Scan preview"
+                        className="max-w-full h-auto max-h-64 mx-auto rounded"
+                      />
+                    </div>
                   </div>
                 )}
 
-                {/* Analyze Button - Enabled only when info is submitted AND a file is selected */}
+                {/* Analyze Button */}
                 <Button
-                  className="mt-6 bg-pink-800 hover:bg-pink-900 text-white w-full md:w-auto" // Made bolder
                   onClick={handleScanSubmit}
-                  disabled={loading || !selectedFile || !infoSubmitted} // Key logic change
+                  disabled={!selectedFile || loading}
+                  className="w-full bg-pink-600 hover:bg-pink-700 text-white py-3"
                 >
-                  {loading ? "Analyzing..." : "Analyze Scan"}
+                  {loading ? (
+                    <div className="flex items-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Analyzing...
+                    </div>
+                  ) : (
+                    "Analyze Scan"
+                  )}
                 </Button>
-
-                {/* Error Display */}
-                {error && (
-                  <p className="mt-4 text-red-600 font-medium text-sm">{error}</p>
-                )}
-
-                {/* Result Display */}
-                {result && !error && (
-                  <div className="mt-6 p-4 border border-pink-200 rounded-md bg-white text-left text-pink-900">
-                    <h3 className="text-lg font-semibold mb-2">
-                      Analysis Result:
-                    </h3>
-                    {/* Nicer formatting for results could be implemented here */}
-                    <div className="text-sm bg-gray-50 p-3 rounded">
-  <p><span className="font-medium">Predicted Class:</span> {result?.current?.predictions?.[0]?.class || "No prediction available"}</p>
-</div>
- 
-                    {/* Add disclaimer about consulting a doctor */}
-                     <p className="mt-3 text-xs text-red-700 font-medium">
-                        Disclaimer: This is an AI analysis and not a medical diagnosis. Always consult a qualified healthcare professional.
-                     </p>
-                  </div>
-                )}
-              </div>
-
-              {/* Privacy Notice */}
-              <div className="mt-6 bg-pink-50 p-4 rounded-md">
-                <p className="text-sm text-pink-700">
-                  <strong>Privacy Notice:</strong> Your scan and information are processed
-                  securely for analysis and are not stored permanently. Analysis uses AI with privacy controls.
-                </p>
               </div>
             </CardContent>
           </Card>
 
-          {/* --- How it works Section (from Snippet 2) --- */}
-          <Card className="border-pink-100 shadow-sm">
-             <CardHeader>
-               <CardTitle className="text-pink-900">How It Works</CardTitle>
-               <CardDescription>
-                 Understanding the scan assessment process
-               </CardDescription>
-             </CardHeader>
-             <CardContent>
-               <div className="space-y-4">
-                 {/* Step 1 */}
-                 <div className="flex items-start">
-                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center mr-3">
-                     <span className="font-medium text-pink-600">1</span>
-                   </div>
-                   <div>
-                     <h4 className="font-medium text-pink-900">Provide Info</h4>
-                     <p className="text-gray-600 text-sm">Enter general details in Step 1.</p>
-                   </div>
-                 </div>
-                 {/* Step 2 */}
-                 <div className="flex items-start">
-                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center mr-3">
-                     <span className="font-medium text-pink-600">2</span>
-                   </div>
-                   <div>
-                     <h4 className="font-medium text-pink-900">Upload Scan</h4>
-                     <p className="text-gray-600 text-sm">Upload your scan image in Step 2.</p>
-                   </div>
-                 </div>
-                 {/* Step 3 */}
-                 <div className="flex items-start">
-                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center mr-3">
-                     <span className="font-medium text-pink-600">3</span>
-                   </div>
-                   <div>
-                     <h4 className="font-medium text-pink-900">AI Analysis</h4>
-                     <p className="text-gray-600 text-sm">Our AI analyzes the scan using the provided context.</p>
-                   </div>
-                 </div>
-                 {/* Step 4 */}
-                 <div className="flex items-start">
-                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center mr-3">
-                     <span className="font-medium text-pink-600">4</span>
-                   </div>
-                   <div>
-                     <h4 className="font-medium text-pink-900">Review Results</h4>
-                     <p className="text-gray-600 text-sm">Receive the analysis report.</p>
-                   </div>
-                 </div>
-                 {/* Step 5 */}
-                 <div className="flex items-start">
-                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center mr-3">
-                     <span className="font-medium text-pink-600">5</span>
-                   </div>
-                   <div>
-                     <h4 className="font-medium text-pink-900">Consult Professional</h4>
-                     <p className="text-gray-600 text-sm">Share results with your doctor for diagnosis.</p>
-                   </div>
-                 </div>
-               </div>
-                {/* Important Disclaimer */}
-               <div className="mt-6 p-4 border border-yellow-300 rounded-md bg-yellow-50">
-                 <p className="text-sm text-yellow-800 font-medium">Important Disclaimer</p>
-                 <p className="text-sm text-yellow-700 mt-1">
-                   This tool assists in detection and is NOT a substitute for professional medical diagnosis. Always consult a healthcare provider.
-                 </p>
-               </div>
-             </CardContent>
-           </Card>
+          {/* Error Display */}
+          {error && (
+            <Card className="mb-8 border-red-200 bg-red-50">
+              <CardContent className="pt-6">
+                <div className="flex items-center text-red-700">
+                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  <span className="font-medium">Error: {error}</span>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Results Display */}
+          {result && (
+            <Card className="border-green-200 bg-green-50">
+              <CardHeader>
+                <CardTitle className="text-green-900">Analysis Results</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <Label className="text-sm font-medium text-green-700">Analysis Status:</Label>
+                    <p className="text-lg font-semibold text-green-900">{result.status}</p>
+                  </div>
+                  {result.confidence && (
+                    <div>
+                      <Label className="text-sm font-medium text-green-700">Confidence Level:</Label>
+                      <p className="text-lg font-semibold text-green-900">{result.confidence}%</p>
+                    </div>
+                  )}
+                  {result.findings && (
+                    <div>
+                      <Label className="text-sm font-medium text-green-700">Key Findings:</Label>
+                      <p className="text-gray-700">{result.findings}</p>
+                    </div>
+                  )}
+                  {result.recommendations && (
+                    <div>
+                      <Label className="text-sm font-medium text-green-700">Recommendations:</Label>
+                      <ul className="list-disc list-inside text-gray-700 space-y-1">
+                        {result.recommendations.map((rec: string, idx: number) => (
+                          <li key={idx}>{rec}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </main>
-
-      {/* --- Footer (from Snippet 2) --- */}
-      <footer className="py-6 bg-pink-900 text-pink-100 mt-12"> {/* Added margin-top */}
-        <div className="container px-4 mx-auto text-center">
-          <p className="text-sm text-pink-300">&copy; {new Date().getFullYear()} HER'S. All rights reserved.</p>
-           {/* Add privacy policy/terms links if needed */}
-        </div>
-      </footer>
     </div>
-  );
+  )
 }

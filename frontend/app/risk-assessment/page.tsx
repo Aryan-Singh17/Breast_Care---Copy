@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import { Logo } from "@/components/logo"
 import quizData from '../../../breast_cancer_quiz.json'
 
 export default function RiskAssessmentPage() {
@@ -61,17 +62,54 @@ export default function RiskAssessmentPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="sticky top-0 z-10 bg-white border-b border-pink-100">
-        <div className="container flex items-center justify-between h-16 px-4 mx-auto">
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold text-pink-600">BrestCare</span>
+      <header className="sticky top-0 z-10 bg-white border-b border-pink-200">
+        <div className="container flex items-center justify-between h-20 px-4 mx-auto">
+          <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+            <Logo 
+              height={40} 
+              width={180} 
+              className="flex-shrink-0 md:w-48 md:h-10 w-36 h-8 leading-none" 
+            />
           </Link>
           <nav className="hidden space-x-6 md:flex">
-            <Link href="/" className="text-pink-950 hover:text-pink-600 transition-colors">Home</Link>
-            <Link href="/chat" className="text-pink-950 hover:text-pink-600 transition-colors">Chat</Link>
-            <Link href="/risk-assessment" className="text-pink-600 font-medium">Risk Assessment</Link>
-            <Link href="/scan-assessment" className="text-pink-950 hover:text-pink-600 transition-colors">Scan Assessment</Link>
+            <Link href="/" className="text-pink-950 hover:text-pink-600 transition-colors">
+              Home
+            </Link>
+            <Link href="/blogs" className="text-pink-950 hover:text-pink-600 transition-colors">
+              Blogs
+            </Link>
+            <Link href="/chat" className="text-pink-950 hover:text-pink-600 transition-colors">
+              Chat
+            </Link>
+            <Link href="/risk-assessment" className="text-pink-600 font-medium">
+              Risk Assessment
+            </Link>
+            <Link href="/scan-assessment" className="text-pink-950 hover:text-pink-600 transition-colors">
+              Scan Assessment
+            </Link>
           </nav>
+          <div className="md:hidden">
+            {/* Mobile menu button */}
+            <Button variant="ghost" size="icon" className="text-pink-950">
+              <span className="sr-only">Open menu</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-6 w-6"
+              >
+                <line x1="4" x2="20" y1="12" y2="12" />
+                <line x1="4" x2="20" y1="6" y2="6" />
+                <line x1="4" x2="20" y1="18" y2="18" />
+              </svg>
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -98,39 +136,61 @@ export default function RiskAssessmentPage() {
                     <label key={idx} className="flex items-center space-x-3 cursor-pointer">
                       <input
                         type="radio"
-                        name={`q${q.id}`}
+                        name={`question-${q.id}`}
                         value={opt.points}
-                        checked={answers[q.id] === opt.points}
                         onChange={() => handleOptionChange(q.id, opt.points)}
-                        className="accent-pink-600"
-                        required
+                        className="text-pink-600 focus:ring-pink-500"
                       />
-                      <span className="text-gray-800">{opt.text}</span>
+                      <span className="text-gray-700">{opt.text}</span>
                     </label>
                   ))}
                 </CardContent>
               </Card>
             ))}
-            <Button type="submit" className="w-full bg-pink-600 hover:bg-pink-700">
-              Submit Answers
+
+            <Button
+              type="submit"
+              className="w-full bg-pink-600 hover:bg-pink-700 text-white py-3"
+            >
+              Get My Risk Assessment
             </Button>
           </form>
+
           {result && (
-            <div className="mt-8 p-4 border border-pink-300 rounded-md bg-pink-50">
-              <h2 className="text-xl font-bold text-pink-900 mb-2">Risk Assessment Result</h2>
-              <p className="text-pink-900 font-semibold mb-2">Total Score: {result.total}</p>
-              <p className="text-pink-900 font-semibold mb-2">{result.risk_level}</p>
-              <p className="text-gray-800">{result.interpretation}</p>
-            </div>
+            <Card className="mt-8 border-pink-200 bg-pink-50">
+              <CardHeader>
+                <CardTitle className="text-pink-900">Your Risk Assessment Result</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <Label className="text-sm font-medium text-pink-700">Risk Level:</Label>
+                    <p className="text-lg font-semibold text-pink-900">{result.level}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-pink-700">Score:</Label>
+                    <p className="text-lg font-semibold text-pink-900">{result.total} points</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-pink-700">Description:</Label>
+                    <p className="text-gray-700">{result.description}</p>
+                  </div>
+                  {result.recommendations && (
+                    <div>
+                      <Label className="text-sm font-medium text-pink-700">Recommendations:</Label>
+                      <ul className="list-disc list-inside text-gray-700 space-y-1">
+                        {result.recommendations.map((rec: string, idx: number) => (
+                          <li key={idx}>{rec}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
           )}
         </div>
       </main>
-
-      <footer className="py-6 bg-pink-900 text-pink-100">
-        <div className="container px-4 mx-auto text-center">
-          <p className="text-pink-300">&copy; {new Date().getFullYear()} BrestCare. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   )
 }

@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import Link from "next/link"
 import { Button } from "../../components/ui/button"
 import { ArrowLeft } from "lucide-react"
+import { Logo } from "@/components/logo"
 
 export default function ChatPage() {
   const [input, setInput] = useState("")
@@ -40,14 +41,21 @@ export default function ChatPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="sticky top-0 z-10 bg-white border-b border-pink-100">
-        <div className="container flex items-center justify-between h-16 px-4 mx-auto">
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold text-pink-600">BrestCare</span>
+      <header className="sticky top-0 z-10 bg-white border-b border-pink-200">
+        <div className="container flex items-center justify-between h-20 px-4 mx-auto">
+          <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+            <Logo 
+              height={40} 
+              width={180} 
+              className="flex-shrink-0 md:w-48 md:h-10 w-36 h-8 leading-none" 
+            />
           </Link>
           <nav className="hidden space-x-6 md:flex">
             <Link href="/" className="text-pink-950 hover:text-pink-600 transition-colors">
               Home
+            </Link>
+            <Link href="/blogs" className="text-pink-950 hover:text-pink-600 transition-colors">
+              Blogs
             </Link>
             <Link href="/chat" className="text-pink-600 font-medium">
               Chat
@@ -59,6 +67,28 @@ export default function ChatPage() {
               Scan Assessment
             </Link>
           </nav>
+          <div className="md:hidden">
+            {/* Mobile menu button */}
+            <Button variant="ghost" size="icon" className="text-pink-950">
+              <span className="sr-only">Open menu</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-6 w-6"
+              >
+                <line x1="4" x2="20" y1="12" y2="12" />
+                <line x1="4" x2="20" y1="6" y2="6" />
+                <line x1="4" x2="20" y1="18" y2="18" />
+              </svg>
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -98,22 +128,20 @@ export default function ChatPage() {
                 className="flex-1 px-4 py-2 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault()
-                    if (!isLoading) sendMessage()
-                  }
-                }}
-                disabled={isLoading}
+                onKeyPress={(e) => e.key === "Enter" && sendMessage()}
               />
-              <Button onClick={sendMessage} disabled={isLoading} className="bg-pink-600 hover:bg-pink-700">
+              <Button
+                onClick={sendMessage}
+                disabled={isLoading}
+                className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 rounded-lg"
+              >
                 {isLoading ? "Sending..." : "Send"}
               </Button>
             </div>
 
-            <div className="mt-6 text-sm text-gray-500">
-              <p>Example questions:</p>
-              <ul className="mt-2 space-y-1">
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold text-pink-900 mb-4">Example questions:</h3>
+              <ul className="space-y-2 text-sm text-gray-600">
                 <li>• What are the early signs of breast cancer?</li>
                 <li>• How often should I get a mammogram?</li>
                 <li>• What factors increase breast cancer risk?</li>
@@ -123,12 +151,6 @@ export default function ChatPage() {
           </div>
         </div>
       </main>
-
-      <footer className="py-6 bg-pink-900 text-pink-100">
-        <div className="container px-4 mx-auto text-center">
-          <p className="text-pink-300">&copy; {new Date().getFullYear()} BrestCare. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   )
 }

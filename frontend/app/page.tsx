@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, MessageCircle, ClipboardCheck, ScanLine, Newspaper, ExternalLink } from "lucide-react"
 import { fetchBreastCancerNews, NewsArticle } from "@/lib/news-api"
+import { HealthPriorityModal } from "@/components/health-priority-modal"
+import { Logo } from "@/components/logo"
 
 // News component
 function NewsSection() {
@@ -148,9 +150,11 @@ function NewsSection() {
           >
             {refreshing ? "Refreshing..." : "Refresh News"}
           </Button>
-          <Button variant="outline" className="border-pink-200 text-pink-700 hover:bg-pink-50">
-            View All News <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
+          <Link href="/blogs">
+            <Button variant="outline" className="border-pink-200 text-pink-700 hover:bg-pink-50">
+              View Blogs <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
@@ -233,6 +237,7 @@ function FAQAccordion() {
 export default function Home() {
   const ctaRef = useRef<HTMLDivElement>(null)
   const faqRef = useRef<HTMLDivElement>(null)
+  const [showModal, setShowModal] = useState(false)
 
   const handleScrollToCta = () => {
     if (ctaRef.current) {
@@ -245,17 +250,33 @@ export default function Home() {
     }
   }
 
+  // Show modal after a short delay when page loads
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowModal(true)
+    }, 2000) // Show modal after 2 seconds
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navigation Bar */}
-      <header className="sticky top-0 z-10 bg-white border-b border-pink-100">
-        <div className="container flex items-center justify-between h-16 px-4 mx-auto">
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold text-pink-600">BrestCare</span>
+      <header className="sticky top-0 z-10 bg-white border-b border-pink-200">
+        <div className="container flex items-center justify-between h-20 px-4 mx-auto">
+          <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+            <Logo 
+              height={40} 
+              width={180} 
+              className="flex-shrink-0 md:w-48 md:h-10 w-36 h-8 leading-none" 
+            />
           </Link>
           <nav className="hidden space-x-6 md:flex">
             <Link href="/" className="text-pink-950 hover:text-pink-600 transition-colors">
               Home
+            </Link>
+            <Link href="/blogs" className="text-pink-950 hover:text-pink-600 transition-colors">
+              Blogs
             </Link>
             <Link href="/chat" className="text-pink-950 hover:text-pink-600 transition-colors">
               Chat
@@ -268,7 +289,7 @@ export default function Home() {
             </Link>
           </nav>
           <div className="md:hidden">
-            {/* Mobile menu button would go here */}
+            {/* Mobile menu button */}
             <Button variant="ghost" size="icon" className="text-pink-950">
               <span className="sr-only">Open menu</span>
               <svg
@@ -633,6 +654,12 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Health Priority Modal */}
+      <HealthPriorityModal 
+        isOpen={showModal} 
+        onClose={() => setShowModal(false)} 
+      />
     </div>
   )
 }
