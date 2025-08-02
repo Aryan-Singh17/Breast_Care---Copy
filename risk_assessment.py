@@ -220,9 +220,9 @@ def run_quiz_from_conversation(conversation: list, api=GROQ_API_KEY):
         "detailed_results": detailed_results,
         "gemini_insights": insights
     }
-
 # ------------------------------
 # Run the Quiz
 # ------------------------------
 # if __name__ == "__main__":
 #     run_quiz(api=GROQ_API_KEY)
+

@@ -47,7 +47,7 @@ export default function ChatPage() {
             <Logo 
               height={40} 
               width={180} 
-              className="flex-shrink-0 md:w-48 md:h-10 w-36 h-8 leading-none" 
+              className="flex-shrink-0 md:w-48 md:h-14 w-36 h-8 leading-none" 
             />
           </Link>
           <nav className="hidden space-x-6 md:flex">

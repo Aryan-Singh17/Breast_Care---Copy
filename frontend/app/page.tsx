@@ -235,18 +235,26 @@ function FAQAccordion() {
 }
 
 export default function Home() {
-  const ctaRef = useRef<HTMLDivElement>(null)
+  const servicesRef = useRef<HTMLDivElement>(null)
   const faqRef = useRef<HTMLDivElement>(null)
   const [showModal, setShowModal] = useState(false)
 
-  const handleScrollToCta = () => {
-    if (ctaRef.current) {
-      ctaRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  const handleScrollToServices = () => {
+    if (servicesRef.current) {
+      const headerOffset = 100; // Adjust this value based on your header height
+      const elementPosition = servicesRef.current.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
     }
   }
   const handleScrollToFaq = () => {
     if (faqRef.current) {
-      faqRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const yOffset = -100; // Slightly more offset for FAQ to ensure heading is fully visible
+      const y = faqRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
   }
 
@@ -266,9 +274,9 @@ export default function Home() {
         <div className="container flex items-center justify-between h-20 px-4 mx-auto">
           <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
             <Logo 
-              height={40} 
-              width={180} 
-              className="flex-shrink-0 md:w-48 md:h-10 w-36 h-8 leading-none" 
+              height={40} // Reduce from 80 to 40
+              width={180} // Reduce from 180 to 120
+              className="flex-shrink-0 h-14 w-auto" // Simplify the className
             />
           </Link>
           <nav className="hidden space-x-6 md:flex">
@@ -325,40 +333,53 @@ export default function Home() {
                 Our comprehensive breast cancer detection tools help you stay informed, assess your risk, and take
                 control of your health.
               </p>
-              <div className="flex flex-wrap justify-center gap-4 mt-10">
-                <button type="button" onClick={handleScrollToCta} className="bg-pink-600 hover:bg-pink-700 text-white rounded-md px-6 py-3 font-medium flex items-center">
-                  Get Started
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </button>
-                <button type="button" onClick={handleScrollToFaq} className="border border-pink-200 text-pink-700 hover:bg-pink-50 rounded-md px-6 py-3 font-medium flex items-center">
-                  Learn More
-                </button>
-              </div>
+              {/* Buttons removed as per user request */}
             </div>
           </div>
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white to-transparent"></div>
         </section>
 
+        {/* New Button Block */}
+        <section className="py-12 bg-white">
+          <div className="container px-4 mx-auto">
+            <div className="flex flex-wrap justify-center gap-6">
+              <button 
+                onClick={handleScrollToServices} 
+                className="px-8 py-3 text-lg font-medium text-white transition-colors bg-pink-600 rounded-lg hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+              >
+                Get Started
+              </button>
+              <button 
+                onClick={handleScrollToFaq} 
+                className="px-8 py-3 text-lg font-medium text-pink-700 transition-colors bg-pink-100 rounded-lg hover:bg-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+              >
+                Learn More
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* Features Section */}
-        <section className="py-16">
+        <section ref={servicesRef} className="py-16" id="services">
           <div className="container px-4 mx-auto">
             <h2 className="mb-12 text-3xl font-bold text-center text-pink-900">Our Services</h2>
             <div className="grid gap-8 md:grid-cols-3">
-              <Card className="border-pink-100 shadow-sm hover:shadow-md transition-shadow">
-                <CardHeader className="pb-4">
+              <Card className="group relative overflow-hidden border-pink-100 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 animate-fade-in">
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <CardHeader className="relative z-10 pb-4">
                   <div className="p-2 mb-4 rounded-full bg-pink-50 w-fit">
                     <MessageCircle className="w-6 h-6 text-pink-600" />
                   </div>
                   <CardTitle className="text-pink-900">AI Chatbot</CardTitle>
                   <CardDescription>Get instant answers to your breast health questions</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative z-10">
                   <p className="text-gray-600">
                     Our AI-powered chatbot provides reliable information about breast cancer, symptoms, and preventive
                     measures.
                   </p>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="relative z-10">
                   <Link href="/chat">
                     <Button variant="ghost" className="text-pink-600 hover:text-pink-700 hover:bg-pink-50 p-0">
                       Start chatting <ArrowRight className="w-4 h-4 ml-2" />
@@ -367,21 +388,22 @@ export default function Home() {
                 </CardFooter>
               </Card>
 
-              <Card className="border-pink-100 shadow-sm hover:shadow-md transition-shadow">
-                <CardHeader className="pb-4">
+              <Card className="group relative overflow-hidden border-pink-100 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 animate-fade-in">
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <CardHeader className="relative z-10 pb-4">
                   <div className="p-2 mb-4 rounded-full bg-pink-50 w-fit">
                     <ClipboardCheck className="w-6 h-6 text-pink-600" />
                   </div>
                   <CardTitle className="text-pink-900">Risk Assessment</CardTitle>
                   <CardDescription>Evaluate your personal risk factors</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative z-10">
                   <p className="text-gray-600">
                     Take our comprehensive quiz to understand your risk level based on family history, lifestyle, and
                     other factors.
                   </p>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="relative z-10">
                   <Link href="/risk-assessment">
                     <Button variant="ghost" className="text-pink-600 hover:text-pink-700 hover:bg-pink-50 p-0">
                       Take assessment <ArrowRight className="w-4 h-4 ml-2" />
@@ -390,20 +412,21 @@ export default function Home() {
                 </CardFooter>
               </Card>
 
-              <Card className="border-pink-100 shadow-sm hover:shadow-md transition-shadow">
-                <CardHeader className="pb-4">
+              <Card className="group relative overflow-hidden border-pink-100 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 animate-fade-in">
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <CardHeader className="relative z-10 pb-4">
                   <div className="p-2 mb-4 rounded-full bg-pink-50 w-fit">
                     <ScanLine className="w-6 h-6 text-pink-600" />
                   </div>
                   <CardTitle className="text-pink-900">Scan Assessment</CardTitle>
                   <CardDescription>Advanced imaging analysis</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative z-10">
                   <p className="text-gray-600">
                     Upload your mammogram or ultrasound images for AI-assisted analysis and early detection support.
                   </p>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="relative z-10">
                   <Link href="/scan-assessment">
                     <Button variant="ghost" className="text-pink-600 hover:text-pink-700 hover:bg-pink-50 p-0">
                       Upload scan <ArrowRight className="w-4 h-4 ml-2" />
@@ -426,8 +449,9 @@ export default function Home() {
             </div>
             <div className="grid gap-8 lg:grid-cols-3">
               {/* What is Breast Cancer & Symptoms */}
-              <Card className="border-pink-100 shadow-sm hover:shadow-md transition-shadow">
-                <CardHeader className="pb-4">
+              <Card className="group relative overflow-hidden border-pink-100 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 animate-fade-in">
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <CardHeader className="relative z-10 pb-4">
                   <div className="p-3 mb-4 rounded-full bg-pink-50 w-fit">
                     <svg className="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -436,7 +460,7 @@ export default function Home() {
                   <CardTitle className="text-pink-900">What is Breast Cancer & Symptoms</CardTitle>
                   <CardDescription>Understanding the basics and early warning signs</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative z-10">
                   <div className="space-y-4">
                     <div className="p-4 bg-pink-50 rounded-lg">
                       <h4 className="font-semibold text-pink-800 mb-2">Common Symptoms:</h4>
@@ -461,9 +485,11 @@ export default function Home() {
                   </div>
                 </CardContent>
               </Card>
+
               {/* Treatment Options */}
-              <Card className="border-pink-100 shadow-sm hover:shadow-md transition-shadow">
-                <CardHeader className="pb-4">
+              <Card className="group relative overflow-hidden border-pink-100 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 animate-fade-in">
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <CardHeader className="relative z-10 pb-4">
                   <div className="p-3 mb-4 rounded-full bg-pink-50 w-fit">
                     <svg className="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -472,7 +498,7 @@ export default function Home() {
                   <CardTitle className="text-pink-900">Treatment Options for Breast Cancer</CardTitle>
                   <CardDescription>Comprehensive treatment approaches</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative z-10">
                   <div className="space-y-4">
                     <div className="p-4 bg-green-50 rounded-lg">
                       <h4 className="font-semibold text-green-800 mb-2">Surgical Options:</h4>
@@ -497,9 +523,11 @@ export default function Home() {
                   </div>
                 </CardContent>
               </Card>
+
               {/* Advanced Therapies */}
-              <Card className="border-pink-100 shadow-sm hover:shadow-md transition-shadow">
-                <CardHeader className="pb-4">
+              <Card className="group relative overflow-hidden border-pink-100 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 animate-fade-in">
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <CardHeader className="relative z-10 pb-4">
                   <div className="p-3 mb-4 rounded-full bg-pink-50 w-fit">
                     <svg className="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -508,7 +536,7 @@ export default function Home() {
                   <CardTitle className="text-pink-900">Advanced Therapies</CardTitle>
                   <CardDescription>Hormone, Targeted & Immunotherapy</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative z-10">
                   <div className="space-y-4">
                     <div className="p-4 bg-yellow-50 rounded-lg">
                       <h4 className="font-semibold text-yellow-800 mb-2">Hormone Therapy:</h4>
@@ -562,7 +590,7 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section id="cta-section" ref={ctaRef} className="py-16">
+        <section id="cta-section" className="py-16">
           <div className="container px-4 mx-auto">
             <div className="p-8 text-center bg-gradient-to-r from-pink-100 to-pink-50 rounded-xl">
               <h2 className="text-3xl font-bold text-pink-900">Take Control of Your Breast Health Today</h2>

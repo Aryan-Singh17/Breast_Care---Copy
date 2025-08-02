@@ -1,33 +1,26 @@
 import React from 'react'
+import Image from 'next/image'
+import logoImg from '@/assets/images/logo.png'
 
 interface LogoProps {
-  className?: string
-  height?: number
   width?: number
+  height?: number
+  className?: string
 }
 
-export function Logo({ className = "", height = 40, width = 180 }: LogoProps) {
+export function Logo({ width, height, className }: LogoProps) {
   return (
-    <img 
-      src="/logo.png"
+    <Image
+      src={logoImg}
       alt="BrestCare Logo"
-      width={width}
-      height={height}
-      className={`logo-container ${className}`}
+      width={width || 180}
+      height={height || 40}
+      className={className}
+      priority
       style={{
         objectFit: 'contain',
-        maxWidth: '100%',
-        height: 'auto',
-        display: 'block',
-        margin: '0',
-        padding: '0',
-        verticalAlign: 'top',
-        lineHeight: '1',
-        backgroundColor: 'transparent',
-        border: 'none',
-        outline: 'none',
-        boxShadow: 'none'
+        maxHeight: '100px' // Ensures consistent height
       }}
     />
   )
-} 
+}
