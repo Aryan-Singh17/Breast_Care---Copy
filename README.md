@@ -26,6 +26,12 @@ A comprehensive full-stack application designed to promote breast cancer awarene
 - Quick and accurate preliminary assessments
 - Secure storage of scan results with privacy controls
 
+### 📰 Educational Blog Section
+- Informative articles about breast health and cancer awareness
+- Latest research and medical advancements
+- Personal stories and community experiences
+- Tips for self-examination and early detection
+
 ### 🌐 User-Friendly Dashboard
 - Intuitive interface for easy navigation
 - Secure user authentication and data management
